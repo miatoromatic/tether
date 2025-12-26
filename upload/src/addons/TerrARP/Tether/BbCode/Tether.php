@@ -48,21 +48,23 @@ class Tether
         // Generate the wiki URL (every word capitalized)
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(BBcode)';
 
-        // Determine border color based on values
+        // Determine border color based on values (still used for popup)
         $borderColor = self::getBorderColor($values['boon'], $values['bane']);
 
-        // Build the HTML output with dynamic border color
+        // Determine text colors for forum display
+        $textColors = self::getTextColors($values['boon'], $values['bane']);
+
+        // Build the HTML output with dynamic text colors
         $html = sprintf(
-            '<div class="tether-container" style="border-color: %s;">
+            '<div class="tether-container">
                 <div class="tether-image-wrapper">
                     <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
                 </div>
                 <div class="tether-stats">
-                    <span class="boon">Boon: %d</span> ·
-                    <span class="bane">Bane: %d</span>
+                    <span class="boon" style="color: %s;">Boon: %d</span> ·
+                    <span class="bane" style="color: %s;">Bane: %d</span>
                 </div>
             </div>',
-            htmlspecialchars($borderColor),
             htmlspecialchars($imageUrl),
             htmlspecialchars($tetherName),
             htmlspecialchars($wikiUrl),
@@ -70,7 +72,9 @@ class Tether
             (int)$values['boon'],
             (int)$values['bane'],
             htmlspecialchars($borderColor),
+            htmlspecialchars($textColors['boon']),
             (int)$values['boon'],
+            htmlspecialchars($textColors['bane']),
             (int)$values['bane']
         );
 
@@ -97,6 +101,45 @@ class Tether
             'boon' => (int)$matches[1],
             'bane' => (int)$matches[2]
         ];
+    }
+
+    /**
+     * Determine text colors for boon and bane display
+     *
+     * @param int $boon Boon value
+     * @param int $bane Bane value
+     * @return array Array with 'boon' and 'bane' color keys
+     */
+    private static function getTextColors($boon, $bane)
+    {
+        $defaultColor = '#7a8695';
+        $boonColor = '#51bbb1';
+        $baneColor = '#d24b7e';
+
+        if ($boon > $bane)
+        {
+            // Boon is higher - highlight boon, gray out bane
+            return [
+                'boon' => $boonColor,
+                'bane' => $defaultColor
+            ];
+        }
+        elseif ($bane > $boon)
+        {
+            // Bane is higher - highlight bane, gray out boon
+            return [
+                'boon' => $defaultColor,
+                'bane' => $baneColor
+            ];
+        }
+        else
+        {
+            // Tied - both gray
+            return [
+                'boon' => $defaultColor,
+                'bane' => $defaultColor
+            ];
+        }
     }
 
     /**
