@@ -42,14 +42,17 @@ class Tether
             return '<span class="bbCodeError">Invalid tether format. Use: positive#,negative#</span>';
         }
 
-        // Convert tether name for URL (replace spaces with underscores, lowercase)
-        $tetherUrlName = str_replace(' ', '_', strtolower($tetherName));
+        // Convert tether name for image URL (lowercase with underscores)
+        $imageUrlName = str_replace(' ', '_', strtolower($tetherName));
+
+        // Convert tether name for wiki URL (Title_Case with underscores)
+        $wikiUrlName = self::toTitleCase($tetherName);
 
         // Generate the image URL
-        $imageUrl = '/db/tethers/' . $tetherUrlName . '.webp';
+        $imageUrl = '/db/tethers/' . $imageUrlName . '.webp';
 
-        // Generate the wiki URL
-        $wikiUrl = 'https://terrarp.com/wiki/' . $tetherUrlName . '_(tether)';
+        // Generate the wiki URL (every word capitalized)
+        $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(Tether)';
 
         // Determine border color based on values
         $borderColor = self::getBorderColor($values['positive'], $values['negative']);
@@ -102,8 +105,8 @@ class Tether
         return '<script>
 if (typeof openTetherPopup === "undefined") {
     function openTetherPopup(wikiUrl, imageUrl, positive, negative, borderColor) {
-        var width = 900;
-        var height = 700;
+        var width = 1000;
+        var height = 800;
         var left = (screen.width - width) / 2;
         var top = (screen.height - height) / 2;
 
@@ -124,33 +127,36 @@ if (typeof openTetherPopup === "undefined") {
             "<html>" +
             "<head>" +
             "<meta charset=\"UTF-8\">" +
-            "<title>Tether Information</title>" +
+            "<title>Tether Wiki</title>" +
             "<style>" +
-            "body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #f0f0f0; }" +
-            ".tether-header { text-align: center; background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }" +
-            ".tether-image-container { display: inline-block; border: 5px solid " + borderColor + "; padding: 10px; border-radius: 8px; background: white; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }" +
-            ".tether-image { max-width: 200px; height: auto; display: block; }" +
-            ".tether-stats { margin-top: 15px; font-size: 16px; }" +
-            ".tether-stats div { margin: 8px 0; }" +
-            ".positive { color: #22aa22; font-weight: bold; }" +
-            ".negative { color: #aa2222; font-weight: bold; }" +
-            ".wiki-link { display: inline-block; margin-top: 20px; padding: 12px 24px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s; }" +
-            ".wiki-link:hover { background: #45a049; }" +
-            ".iframe-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); height: calc(100vh - 320px); min-height: 400px; }" +
-            "iframe { width: 100%; height: 100%; border: none; }" +
+            "/* Base popup styles */" +
+            "body { margin: 0; padding: 0; overflow: hidden; }" +
+            ".iframe-container { width: 100%; height: 100vh; }" +
+            "iframe { width: 100%; height: 100%; border: none; display: block; }" +
+            "" +
+            "/* ============================================== */" +
+            "/* CUSTOM CSS - Edit below to style wiki content */" +
+            "/* ============================================== */" +
+            "" +
+            "/* Example: Add a border based on tether values */" +
+            "/* You can inject CSS that affects the iframe content if same-origin */" +
+            "" +
+            "/* Uncomment and customize as needed: */" +
+            "/*" +
+            ".tether-positive-" + positive + " {" +
+            "  border: 5px solid " + borderColor + " !important;" +
+            "}" +
+            "*/" +
+            "" +
+            "/* Add your custom styles here */" +
+            "" +
+            "" +
+            "/* ============================================== */" +
+            "/* END CUSTOM CSS                                */" +
+            "/* ============================================== */" +
             "</style>" +
             "</head>" +
             "<body>" +
-            "<div class=\"tether-header\">" +
-            "<div class=\"tether-image-container\">" +
-            "<img src=\"" + imageUrl + "\" alt=\"Tether\" class=\"tether-image\" onerror=\"this.style.display=\'none\'; this.parentElement.innerHTML += \'<p>Image not found</p>\';\" />" +
-            "</div>" +
-            "<div class=\"tether-stats\">" +
-            "<div><span class=\"positive\">Positive:</span> " + positive + "</div>" +
-            "<div><span class=\"negative\">Negative:</span> " + negative + "</div>" +
-            "</div>" +
-            "<a href=\"" + wikiUrl + "\" target=\"_blank\" class=\"wiki-link\">Open Full Wiki Page</a>" +
-            "</div>" +
             "<div class=\"iframe-container\">" +
             "<iframe src=\"" + wikiUrl + "\" title=\"Tether Wiki\"></iframe>" +
             "</div>" +
@@ -223,5 +229,24 @@ if (typeof openTetherPopup === "undefined") {
             // Very negative - red
             return '#ff0000';
         }
+    }
+
+    /**
+     * Convert tether name to Title_Case for wiki URLs
+     * Example: "gondoliers mercy" -> "Gondoliers_Mercy"
+     *
+     * @param string $name The tether name
+     * @return string Title case with underscores
+     */
+    private static function toTitleCase($name)
+    {
+        // Replace spaces with underscores and capitalize each word
+        $name = str_replace(' ', '_', $name);
+
+        // Split by underscore, capitalize each word, rejoin
+        $words = explode('_', $name);
+        $words = array_map('ucfirst', array_map('strtolower', $words));
+
+        return implode('_', $words);
     }
 }
