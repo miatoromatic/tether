@@ -58,8 +58,8 @@ class Tether
                     <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
                 </div>
                 <div class="tether-stats">
-                    <span class="boon">Boon:</span> %d ·
-                    <span class="bane">Bane:</span> %d
+                    <span class="boon">Boon: %d</span> ·
+                    <span class="bane">Bane: %d</span>
                 </div>
             </div>',
             htmlspecialchars($borderColor),
@@ -110,30 +110,32 @@ class Tether
     {
         $diff = $boon - $bane;
 
-        if ($diff > 2)
+        // Future expansion: Large differences get extreme colors
+        if ($diff >= 6)
         {
-            // Very positive - bright green
+            // Very high boon - bright green
             return '#00ff00';
         }
-        elseif ($diff > 0)
+        elseif ($diff <= -6)
         {
-            // Positive - green
-            return '#22aa22';
+            // Very high bane - red
+            return '#ff0000';
         }
-        elseif ($diff === 0)
+        // Standard logic
+        elseif ($boon > $bane)
         {
-            // Neutral - gray
-            return '#888888';
+            // Boon is higher - cyan (boon color)
+            return '#51bbb1';
         }
-        elseif ($diff > -3)
+        elseif ($bane > $boon)
         {
-            // Negative - orange/red
-            return '#ff6600';
+            // Bane is higher - pink (bane color)
+            return '#d24b7e';
         }
         else
         {
-            // Very negative - red
-            return '#ff0000';
+            // Equal - dark gray
+            return '#2e354a';
         }
     }
 
