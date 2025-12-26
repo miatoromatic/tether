@@ -28,11 +28,21 @@ In Admin CP → Content → BB codes → Add BB code:
 
 See [BBCODE_CONFIGURATION.md](BBCODE_CONFIGURATION.md) for complete setup details.
 
-### 3. Add JavaScript
-Add to your `page_container` template before `</body>`:
-```html
-<script src="/js/terrarp/tether/tether-popup.js"></script>
-```
+### 3. Add JavaScript (Optional)
+
+**Option A: Automatic (Default - No Template Modification Required)**
+- JavaScript is automatically included inline when tethers are rendered
+- Works immediately after installation
+- No additional steps needed
+
+**Option B: External File (Cleaner, Recommended for Production)**
+- Add to your `page_container` template before `</body>`:
+  ```html
+  <script src="/js/terrarp/tether/tether-popup.js"></script>
+  ```
+- Prevents inline JavaScript duplication
+- Better for page load performance
+- See [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) for detailed template modification steps
 
 ### 4. Add Tether Images
 Place `.webp` images in `/db/tethers/` directory with lowercase names:
@@ -80,6 +90,7 @@ upload/
 
 - **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** - Complete installation instructions
 - **[BBCODE_CONFIGURATION.md](BBCODE_CONFIGURATION.md)** - BBCode setup reference
+- **[TEMPLATE_MODIFICATION_GUIDE.md](TEMPLATE_MODIFICATION_GUIDE.md)** - How to use external JavaScript file (optional)
 - **[TECHNICAL_NOTES.md](TECHNICAL_NOTES.md)** - Implementation details and limitations
 
 ## About the Border Styling Solution

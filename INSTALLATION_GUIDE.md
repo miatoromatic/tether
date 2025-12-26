@@ -94,21 +94,90 @@ Displays the Arachnas Swansong tether image with Positive: 1 and Negative: 5 bel
 
 Click **Save**
 
-### 5. Include JavaScript in Templates
+### 5. Include JavaScript (Choose One Option)
 
-To enable the popup functionality, you need to include the JavaScript file in your page template.
+The popup functionality requires JavaScript. You have two options:
 
-#### Option A: Template Modification (Recommended)
-1. In Admin CP, go to: **Appearance** → **Templates** → **page_container**
-2. Find the `</body>` closing tag near the end
-3. Add this line just before `</body>`:
+#### Option A: Automatic Inline (Default - No Template Modification)
+
+**How it works:**
+- JavaScript is automatically embedded in the page when the first tether BBCode is rendered
+- Works immediately after BBCode configuration
+- No template modifications needed
+
+**Pros:**
+- Zero configuration - works out of the box
+- No template changes required
+- Perfect for testing and quick setup
+
+**Cons:**
+- JavaScript is included in page HTML (slightly larger page size)
+- Included on every page with tethers
+
+**To use:** Nothing to do - this is the default behavior!
+
+---
+
+#### Option B: External JavaScript File (Recommended for Production)
+
+**How it works:**
+- Load JavaScript from a separate file in your page template
+- Cleaner HTML output
+- Better browser caching
+
+**Pros:**
+- Cleaner HTML (no inline scripts)
+- Better browser caching
+- Smaller page size on pages with multiple tethers
+- More professional approach
+
+**Cons:**
+- Requires one-time template modification
+
+**Setup Instructions:**
+
+1. In Admin CP, go to: **Appearance** → **Templates**
+2. Search for and click: **page_container**
+3. Find the `</body>` closing tag (near the very end of the template)
+4. Add this line just **before** `</body>`:
+   ```html
+   <script src="/js/terrarp/tether/tether-popup.js"></script>
+   ```
+5. Click **Save**
+
+**Example - What it should look like:**
 ```html
-<script src="/js/terrarp/tether/tether-popup.js"></script>
+    ... other template content ...
+
+    <script src="/js/terrarp/tether/tether-popup.js"></script>
+</body>
+</html>
 ```
 
-#### Option B: Template Modification via File System
-Edit: `src/XF/Template/page_container.php` or create a template modification
-Add the script tag as shown above.
+**Alternative: Create a Template Modification**
+
+For a cleaner upgrade path, you can create a template modification instead:
+
+1. Admin CP → **Appearance** → **Template modifications** → **Add template modification**
+2. **Template:** `page_container`
+3. **Modification key:** `terrarp_tether_js`
+4. **Description:** `Include Tether popup JavaScript`
+5. **Execution order:** `10`
+6. **Action:** Find and replace
+7. **Find:**
+   ```html
+   </body>
+   ```
+8. **Replace:**
+   ```html
+   <script src="/js/terrarp/tether/tether-popup.js"></script>
+   </body>
+   ```
+9. Click **Save**
+
+**Note:** Both options work together! If you use Option B, the inline JavaScript (Option A) will detect that the function already exists and won't duplicate it.
+
+---
 
 ### 6. Test the BBCode
 
