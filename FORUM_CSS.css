@@ -11,9 +11,9 @@
     vertical-align: top;
 }
 
-/* Tether Image Wrapper (with colored border) */
+/* Tether Image Wrapper */
 .tether-image-wrapper {
-    border: 3px solid; /* Color set dynamically by BBCode */
+    border: 3px solid #ccc; /* Default border color - customize as needed */
     padding: 3px;
     border-radius: 4px;
     background: #fff;

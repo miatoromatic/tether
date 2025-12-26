@@ -71,7 +71,7 @@ class Tether
         // Build the HTML output (no inline styles - user will define in forum CSS)
         $html = $jsScript . sprintf(
             '<div class="tether-container">
-                <div class="tether-image-wrapper" style="border-color: %s;">
+                <div class="tether-image-wrapper">
                     <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
                 </div>
                 <div class="tether-stats">
@@ -79,7 +79,6 @@ class Tether
                     <span class="bane">Bane:</span> %d
                 </div>
             </div>',
-            htmlspecialchars($borderColor),
             htmlspecialchars($imageUrl),
             htmlspecialchars($tetherName),
             htmlspecialchars($wikiUrl),
@@ -129,12 +128,11 @@ if (typeof openTetherPopup === "undefined") {
             "<meta charset=\"UTF-8\">" +
             "<title>Tether Wiki</title>" +
             "<style>" +
-            "body { margin: -5px 20px 0 20px; padding: 0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; background: #090909; }" +
-            ".tether-stats { margin: 15px; font-size: 16px; padding: 5px; color: #eee; font-weight: 600; }" +
+            "body { margin: 0; padding: 0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; background: #090909; }" +
+            ".counter { background-color: #1c202d; padding: 5px; margin: 5px 20px; color: #eee; font-size: 14px; font-weight: 600; }" +
             ".boon { color: #51bbb1; }" +
             ".bane { color: #d24b7e; }" +
-            ".tether-header { text-align: center; background: #11141d; border-radius: 8px; }" +
-            ".iframe-container { background: transparent; overflow: hidden; height: calc(100vh - 320px); min-height: 400px; }" +
+            ".iframe-container { background: transparent; overflow: hidden; height: calc(100vh - 60px); }" +
             "iframe { width: 100%; height: 100%; border: none; display: block; }" +
             "" +
             "/* ============================================== */" +
@@ -150,6 +148,10 @@ if (typeof openTetherPopup === "undefined") {
             "</style>" +
             "</head>" +
             "<body>" +
+            "<div class=\"counter\">" +
+            "<span class=\"boon\">Boon:</span> " + boon + " | " +
+            "<span class=\"bane\">Bane:</span> " + bane +
+            "</div>" +
             "<div class=\"iframe-container\">" +
             "<iframe src=\"" + wikiUrl + "\" title=\"Tether Wiki\"></iframe>" +
             "</div>" +
