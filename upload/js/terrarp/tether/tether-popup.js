@@ -5,11 +5,11 @@
  * @param {string} imageUrl - The URL to the tether image (unused but kept for compatibility)
  * @param {number} boon - The boon value
  * @param {number} bane - The bane value
- * @param {string} borderColor - The border color based on values
+ * @param {string} borderColor - The border color based on values (unused but kept for compatibility)
  */
 function openTetherPopup(wikiUrl, imageUrl, boon, bane, borderColor) {
     // Create popup window
-    var width = 1000;
+    var width = 900;
     var height = 800;
     var left = (screen.width - width) / 2;
     var top = (screen.height - height) / 2;
@@ -35,11 +35,11 @@ function openTetherPopup(wikiUrl, imageUrl, boon, bane, borderColor) {
         '<meta charset="UTF-8">' +
         '<title>Tether Wiki</title>' +
         '<style>' +
-        'body { margin: 0; padding: 0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; background: #090909; }' +
-        '.counter { background-color: #1c202d; padding: 5px; margin: 5px 20px; color: #eee; font-size: 14px; font-weight: 600; }' +
+        'body { background: #101219; margin: 0; padding: 0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; }' +
+        '.counter { padding: 5px; margin: 5px 15px; color: #474d60; font-size: 1.4em; font-weight: 600; text-align: left; }' +
         '.boon { color: #51bbb1; }' +
         '.bane { color: #d24b7e; }' +
-        '.iframe-container { background: transparent; overflow: hidden; height: calc(100vh - 60px); }' +
+        '.iframe-container { margin: 0 20px; border-radius: 8px; background: transparent; overflow: hidden; height: calc(100vh - 60px); }' +
         'iframe { width: 100%; height: 100%; border: none; display: block; }' +
         '' +
         '/* ============================================== */' +
@@ -49,6 +49,7 @@ function openTetherPopup(wikiUrl, imageUrl, boon, bane, borderColor) {
         '/* Add your custom styles here */' +
         '' +
         '' +
+        '' +
         '/* ============================================== */' +
         '/* END CUSTOM CSS                                */' +
         '/* ============================================== */' +
@@ -56,8 +57,8 @@ function openTetherPopup(wikiUrl, imageUrl, boon, bane, borderColor) {
         '</head>' +
         '<body>' +
         '<div class="counter">' +
-        '<span class="boon">Boon:</span> ' + boon + ' | ' +
-        '<span class="bane">Bane:</span> ' + bane +
+        '<span class="boon">Boon:</span> ' + '<span class="boon">' + boon + '</span>' + ' · ' +
+        '<span class="bane">Bane:</span> ' + '<span class="bane">' + bane + '</span>' +
         '</div>' +
         '<div class="iframe-container">' +
         '<iframe src="' + wikiUrl + '" title="Tether Wiki"></iframe>' +
