@@ -112,7 +112,7 @@ class Tether
      */
     private static function getTextColors($boon, $bane)
     {
-        $defaultColor = '#7a8695';
+        $defaultColor = '#596a80';
         $boonColor = '#51bbb1';
         $baneColor = '#d24b7e';
 
@@ -134,10 +134,10 @@ class Tether
         }
         else
         {
-            // Tied - both gray
+            // Tied - both show their colors
             return [
-                'boon' => $defaultColor,
-                'bane' => $defaultColor
+                'boon' => $boonColor,
+                'bane' => $baneColor
             ];
         }
     }
