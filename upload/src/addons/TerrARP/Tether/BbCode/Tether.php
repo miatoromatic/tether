@@ -30,16 +30,16 @@ class Tether
             return '';
         }
 
-        // Get the content (positive and negative values)
+        // Get the content (boon and bane values)
         $content = $renderer->renderSubTree($tagChildren, $options);
         $content = trim(strip_tags($content));
 
-        // Parse positive and negative values
+        // Parse boon and bane values
         $values = self::parseValues($content);
 
         if ($values === null)
         {
-            return '<span class="bbCodeError">Invalid tether format. Use: positive#,negative#</span>';
+            return '<span class="bbCodeError">Invalid tether format. Use: boon#,bane#</span>';
         }
 
         // Convert tether name for image URL (lowercase with underscores)
@@ -55,7 +55,7 @@ class Tether
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(Tether)';
 
         // Determine border color based on values
-        $borderColor = self::getBorderColor($values['positive'], $values['negative']);
+        $borderColor = self::getBorderColor($values['boon'], $values['bane']);
 
         // Generate unique ID for this tether instance
         $uniqueId = 'tether-' . md5($tetherName . $content . microtime());
@@ -68,15 +68,15 @@ class Tether
             self::$jsIncluded = true;
         }
 
-        // Build the HTML output
+        // Build the HTML output (no inline styles - user will define in forum CSS)
         $html = $jsScript . sprintf(
-            '<div class="tether-container" style="display: inline-block; margin: 5px; text-align: center; vertical-align: top;">
-                <div class="tether-image-wrapper" style="border: 3px solid %s; padding: 3px; border-radius: 4px; background: #fff;">
-                    <img src="%s" alt="%s" class="tether-image" style="max-width: 150px; height: auto; display: block; cursor: pointer;" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
+            '<div class="tether-container">
+                <div class="tether-image-wrapper" style="border-color: %s;">
+                    <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
                 </div>
-                <div class="tether-stats" style="font-size: 11px; margin-top: 5px; padding: 5px; background: #f5f5f5; border-radius: 3px;">
-                    <strong style="color: #22aa22;">Positive:</strong> %d<br>
-                    <strong style="color: #aa2222;">Negative:</strong> %d
+                <div class="tether-stats">
+                    <span class="boon">Boon:</span> %d<br>
+                    <span class="bane">Bane:</span> %d
                 </div>
             </div>',
             htmlspecialchars($borderColor),
@@ -84,11 +84,11 @@ class Tether
             htmlspecialchars($tetherName),
             htmlspecialchars($wikiUrl),
             htmlspecialchars($imageUrl),
-            (int)$values['positive'],
-            (int)$values['negative'],
+            (int)$values['boon'],
+            (int)$values['bane'],
             htmlspecialchars($borderColor),
-            (int)$values['positive'],
-            (int)$values['negative']
+            (int)$values['boon'],
+            (int)$values['bane']
         );
 
         return $html;
@@ -104,7 +104,7 @@ class Tether
     {
         return '<script>
 if (typeof openTetherPopup === "undefined") {
-    function openTetherPopup(wikiUrl, imageUrl, positive, negative, borderColor) {
+    function openTetherPopup(wikiUrl, imageUrl, boon, bane, borderColor) {
         var width = 1000;
         var height = 800;
         var left = (screen.width - width) / 2;
@@ -129,24 +129,17 @@ if (typeof openTetherPopup === "undefined") {
             "<meta charset=\"UTF-8\">" +
             "<title>Tether Wiki</title>" +
             "<style>" +
-            "/* Base popup styles */" +
-            "body { margin: 0; padding: 0; overflow: hidden; }" +
-            ".iframe-container { width: 100%; height: 100vh; }" +
+            "body { margin: -5px 20px 0 20px; padding: 0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; background: #090909; }" +
+            ".tether-stats { margin: 15px; font-size: 16px; padding: 5px; color: #eee; font-weight: 600; }" +
+            ".boon { color: #51bbb1; }" +
+            ".bane { color: #d24b7e; }" +
+            ".tether-header { text-align: center; background: #11141d; border-radius: 8px; }" +
+            ".iframe-container { background: transparent; overflow: hidden; height: calc(100vh - 320px); min-height: 400px; }" +
             "iframe { width: 100%; height: 100%; border: none; display: block; }" +
             "" +
             "/* ============================================== */" +
             "/* CUSTOM CSS - Edit below to style wiki content */" +
             "/* ============================================== */" +
-            "" +
-            "/* Example: Add a border based on tether values */" +
-            "/* You can inject CSS that affects the iframe content if same-origin */" +
-            "" +
-            "/* Uncomment and customize as needed: */" +
-            "/*" +
-            ".tether-positive-" + positive + " {" +
-            "  border: 5px solid " + borderColor + " !important;" +
-            "}" +
-            "*/" +
             "" +
             "/* Add your custom styles here */" +
             "" +
@@ -172,37 +165,37 @@ if (typeof openTetherPopup === "undefined") {
     }
 
     /**
-     * Parse the positive and negative values from content
+     * Parse the boon and bane values from content
      *
-     * @param string $content Content in format "positive#,negative#"
-     * @return array|null Array with 'positive' and 'negative' keys, or null if invalid
+     * @param string $content Content in format "boon#,bane#"
+     * @return array|null Array with 'boon' and 'bane' keys, or null if invalid
      */
     private static function parseValues($content)
     {
-        // Expected format: positive#,negative#
-        // Examples: positive1,negative5 or positive2,negative3
+        // Expected format: boon#,bane#
+        // Examples: boon1,bane5 or boon2,bane3
 
-        if (!preg_match('/^positive(\d+)\s*,\s*negative(\d+)$/i', $content, $matches))
+        if (!preg_match('/^boon(\d+)\s*,\s*bane(\d+)$/i', $content, $matches))
         {
             return null;
         }
 
         return [
-            'positive' => (int)$matches[1],
-            'negative' => (int)$matches[2]
+            'boon' => (int)$matches[1],
+            'bane' => (int)$matches[2]
         ];
     }
 
     /**
-     * Determine border color based on positive/negative values
+     * Determine border color based on boon/bane values
      *
-     * @param int $positive Positive value
-     * @param int $negative Negative value
+     * @param int $boon Boon value
+     * @param int $bane Bane value
      * @return string Hex color code
      */
-    private static function getBorderColor($positive, $negative)
+    private static function getBorderColor($boon, $bane)
     {
-        $diff = $positive - $negative;
+        $diff = $boon - $bane;
 
         if ($diff > 2)
         {

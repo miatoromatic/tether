@@ -1,0 +1,67 @@
+/* ============================================== */
+/* Tether System - Forum CSS Styles             */
+/* Add this to your XenForo extra.less template */
+/* ============================================== */
+
+/* Tether Container */
+.tether-container {
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    vertical-align: top;
+}
+
+/* Tether Image Wrapper (with colored border) */
+.tether-image-wrapper {
+    border: 3px solid; /* Color set dynamically by BBCode */
+    padding: 3px;
+    border-radius: 4px;
+    background: #fff;
+}
+
+/* Tether Image */
+.tether-image {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    cursor: pointer;
+}
+
+/* Tether Stats Container */
+.tether-stats {
+    font-size: 11px;
+    margin-top: 5px;
+    padding: 5px;
+    background: #f5f5f5;
+    border-radius: 3px;
+}
+
+/* Boon Text */
+.boon {
+    color: #51bbb1;
+    font-weight: bold;
+}
+
+/* Bane Text */
+.bane {
+    color: #d24b7e;
+    font-weight: bold;
+}
+
+/* ============================================== */
+/* Optional: Dark Mode Adjustments               */
+/* ============================================== */
+
+/* Uncomment if you want dark mode support */
+/*
+@media (prefers-color-scheme: dark) {
+    .tether-image-wrapper {
+        background: #1a1a1a;
+    }
+
+    .tether-stats {
+        background: #2a2a2a;
+        color: #eee;
+    }
+}
+*/
