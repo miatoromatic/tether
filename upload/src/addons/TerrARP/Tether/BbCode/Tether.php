@@ -48,39 +48,24 @@ class Tether
         // Generate the wiki URL (every word capitalized)
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(BBcode)';
 
-        // Generate the overlay page URL
-        $basePath = \XF::app()->request()->getBasePath();
-        $overlayUrl = $basePath . '/pages/tether/';
-
-        // Determine border color based on values (still used for popup)
-        $borderColor = self::getBorderColor($values['boon'], $values['bane']);
-
         // Determine text colors for forum display
         $textColors = self::getTextColors($values['boon'], $values['bane']);
 
-        // Build the HTML output with data attributes for overlay
+        // Build the HTML output - simple popup window
         $html = sprintf(
             '<div class="tether-container">
                 <div class="tether-image-wrapper">
-                    <a href="%s"
-                       data-xf-click="overlay"
-                       data-tether-name="%s"
-                       data-tether-boon="%d"
-                       data-tether-bane="%d">
-                        <img src="%s" alt="%s" class="tether-image" />
-                    </a>
+                    <img src="%s" alt="%s" class="tether-image" style="cursor: pointer;"
+                         onclick="window.open(\'%s\', \'TetherWiki\', \'width=900,height=800,scrollbars=yes,resizable=yes\')" />
                 </div>
                 <div class="tether-stats">
                     <span class="boon" style="color: %s;">Boon: %d</span> ·
                     <span class="bane" style="color: %s;">Bane: %d</span>
                 </div>
             </div>',
-            htmlspecialchars($overlayUrl),
-            htmlspecialchars($wikiUrlName),
-            (int)$values['boon'],
-            (int)$values['bane'],
             htmlspecialchars($imageUrl),
             htmlspecialchars($tetherName),
+            htmlspecialchars($wikiUrl),
             htmlspecialchars($textColors['boon']),
             (int)$values['boon'],
             htmlspecialchars($textColors['bane']),
