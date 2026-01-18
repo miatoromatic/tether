@@ -1,6 +1,6 @@
 <?php
 
-namespace TerrARP\Tether;
+namespace TSRP\Tether;
 
 use XF\AddOn\AbstractSetup;
 use XF\AddOn\StepRunnerInstallTrait;

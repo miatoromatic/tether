@@ -1,6 +1,6 @@
 <?php
 
-namespace TerrARP\Tether\BbCode;
+namespace TSRP\Tether\BbCode;
 
 class Tether
 {
