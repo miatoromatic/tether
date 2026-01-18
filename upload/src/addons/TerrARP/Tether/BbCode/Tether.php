@@ -48,8 +48,8 @@ class Tether
         // Generate the wiki URL (every word capitalized)
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(BBcode)';
 
-        // Generate the overlay page URL with parameters
-        $overlayUrl = '/pages/tether/?name=' . urlencode($wikiUrlName) . '&boon=' . (int)$values['boon'] . '&bane=' . (int)$values['bane'];
+        // Generate the overlay page URL with parameters (relative to forum root)
+        $overlayUrl = 'pages/tether/?name=' . urlencode($wikiUrlName) . '&boon=' . (int)$values['boon'] . '&bane=' . (int)$values['bane'];
 
         // Determine border color based on values (still used for popup)
         $borderColor = self::getBorderColor($values['boon'], $values['bane']);
