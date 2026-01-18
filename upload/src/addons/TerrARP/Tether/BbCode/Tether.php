@@ -39,24 +39,26 @@ class Tether
         // Convert tether name for image URL (lowercase with underscores)
         $imageUrlName = str_replace(' ', '_', strtolower($tetherName));
 
-        // Convert tether name for wiki URL (Title_Case with underscores)
-        $wikiUrlName = self::toTitleCase($tetherName);
+        // Convert tether name for wiki URL (preserve original capitalization)
+        $wikiUrlName = str_replace(' ', '_', $tetherName);
 
         // Generate the image URL
         $imageUrl = '/db/tethers/' . $imageUrlName . '.webp';
 
-        // Generate the wiki URL (every word capitalized)
+        // Generate the wiki URL (preserves your exact capitalization)
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(BBcode)';
+
+        // Determine border color based on values (still used for popup)
+        $borderColor = self::getBorderColor($values['boon'], $values['bane']);
 
         // Determine text colors for forum display
         $textColors = self::getTextColors($values['boon'], $values['bane']);
 
-        // Build the HTML output - simple popup window
+        // Build the HTML output with dynamic text colors
         $html = sprintf(
             '<div class="tether-container">
                 <div class="tether-image-wrapper">
-                    <img src="%s" alt="%s" class="tether-image" style="cursor: pointer;"
-                         onclick="window.open(\'%s\', \'TetherWiki\', \'width=900,height=800,scrollbars=yes,resizable=yes\')" />
+                    <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
                 </div>
                 <div class="tether-stats">
                     <span class="boon" style="color: %s;">Boon: %d</span> ·
@@ -66,6 +68,10 @@ class Tether
             htmlspecialchars($imageUrl),
             htmlspecialchars($tetherName),
             htmlspecialchars($wikiUrl),
+            htmlspecialchars($imageUrl),
+            (int)$values['boon'],
+            (int)$values['bane'],
+            htmlspecialchars($borderColor),
             htmlspecialchars($textColors['boon']),
             (int)$values['boon'],
             htmlspecialchars($textColors['bane']),
@@ -174,24 +180,5 @@ class Tether
             // Equal - dark gray
             return '#2e354a';
         }
-    }
-
-    /**
-     * Convert tether name to Title_Case for wiki URLs
-     * Example: "gondoliers mercy" -> "Gondoliers_Mercy"
-     *
-     * @param string $name The tether name
-     * @return string Title case with underscores
-     */
-    private static function toTitleCase($name)
-    {
-        // Replace spaces with underscores and capitalize each word
-        $name = str_replace(' ', '_', $name);
-
-        // Split by underscore, capitalize each word, rejoin
-        $words = explode('_', $name);
-        $words = array_map('ucfirst', array_map('strtolower', $words));
-
-        return implode('_', $words);
     }
 }
