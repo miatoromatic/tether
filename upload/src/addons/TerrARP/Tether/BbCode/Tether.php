@@ -48,6 +48,9 @@ class Tether
         // Generate the wiki URL (every word capitalized)
         $wikiUrl = 'https://terrarp.com/wiki/' . $wikiUrlName . '_(BBcode)';
 
+        // Generate the overlay page URL with parameters
+        $overlayUrl = '/pages/tether/?name=' . urlencode($wikiUrlName) . '&boon=' . (int)$values['boon'] . '&bane=' . (int)$values['bane'];
+
         // Determine border color based on values (still used for popup)
         $borderColor = self::getBorderColor($values['boon'], $values['bane']);
 
@@ -58,20 +61,18 @@ class Tether
         $html = sprintf(
             '<div class="tether-container">
                 <div class="tether-image-wrapper">
-                    <img src="%s" alt="%s" class="tether-image" onclick="openTetherPopup(\'%s\', \'%s\', %d, %d, \'%s\')" />
+                    <a href="%s" data-xf-click="overlay">
+                        <img src="%s" alt="%s" class="tether-image" />
+                    </a>
                 </div>
                 <div class="tether-stats">
                     <span class="boon" style="color: %s;">Boon: %d</span> ·
                     <span class="bane" style="color: %s;">Bane: %d</span>
                 </div>
             </div>',
+            htmlspecialchars($overlayUrl),
             htmlspecialchars($imageUrl),
             htmlspecialchars($tetherName),
-            htmlspecialchars($wikiUrl),
-            htmlspecialchars($imageUrl),
-            (int)$values['boon'],
-            (int)$values['bane'],
-            htmlspecialchars($borderColor),
             htmlspecialchars($textColors['boon']),
             (int)$values['boon'],
             htmlspecialchars($textColors['bane']),
